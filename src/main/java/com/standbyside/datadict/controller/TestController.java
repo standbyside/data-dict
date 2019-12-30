@@ -1,23 +1,31 @@
 package com.standbyside.datadict.controller;
 
-import com.standbyside.datadict.service.TestService;
+import com.itextpdf.text.DocumentException;
+import com.standbyside.datadict.service.DataService;
+import com.standbyside.datadict.service.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @RestController
 public class TestController {
 
     @Autowired
-    private TestService testService;
+    private DataService testService;
+
+    @Autowired
+    private PdfService pdfService;
 
     @GetMapping("tables")
     public Object tables() {
         return testService.findTables();
     }
 
-    @GetMapping("columns")
-    public Object columns() {
-        return testService.findColumns();
+    @GetMapping("pdf")
+    public Object pdf() throws IOException, DocumentException {
+        pdfService.generateFile(testService.findTables());
+        return "success";
     }
 }

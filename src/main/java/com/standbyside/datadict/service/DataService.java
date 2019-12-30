@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
-public class TestService {
+public class DataService {
 
     @Value("${custom.schema-name}")
     private String schemaName;
@@ -22,10 +24,13 @@ public class TestService {
     private ColumnMapper columnMapper;
 
     public List<TableInfo> findTables() {
-        return tableMapper.findTables(schemaName);
-    }
-
-    public List<ColumnInfo> findColumns() {
-        return columnMapper.findColumns(schemaName);
+        // 表
+        List<TableInfo> tables = tableMapper.findTables(schemaName);
+        // 字段
+        List<ColumnInfo> columns = columnMapper.findColumns(schemaName);
+        Map<String, List<ColumnInfo>> columnMap = columns.stream().collect(Collectors.groupingBy(ColumnInfo::getTableName));
+        tables.stream().forEach(table -> table.setColumns(columnMap.get(table.getTableName())));
+        // 索引 TODO
+        return tables;
     }
 }

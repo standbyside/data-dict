@@ -1,10 +1,11 @@
 package com.standbyside.datadict.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -20,4 +21,8 @@ public class TableInfo {
    * 表注释.
    */
   private String tableComment;
+  /**
+   * 字段列表.
+   */
+  private List<ColumnInfo> columns;
 }

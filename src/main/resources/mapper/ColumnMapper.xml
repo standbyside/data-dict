@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.standbyside.datadict.mapper.ColumnMapper">
+
+    <select id="findColumns" resultType="com.standbyside.datadict.entity.ColumnInfo">
+        SELECT
+            t.table_name,
+            t.column_name,
+            t.ordinal_position,
+            t.column_default,
+            t.is_nullable,
+            t.column_type,
+            t.column_key,
+            t.column_comment
+        FROM information_schema.columns t
+        WHERE t.table_schema = #{schemaName}
+        ORDER BY t.table_name, t.ordinal_position
+    </select>
+
+</mapper>

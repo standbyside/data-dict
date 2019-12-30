@@ -2,6 +2,6 @@
 
 自动生成数据字典
 
-生成doc：pom中 使用itext 2.1.7 + itext-rtf 2.1.7
-
-生成pdf：pom中 使用itext
+1. 修改application.properties的数据库和文件生成位置
+2. run DataDictApplication
+3. 生成doc：localhost:8080/doc；生成pdf：localhost:8080/pdf

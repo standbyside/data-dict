@@ -10,6 +10,7 @@ import com.lowagie.text.Paragraph;
 import com.lowagie.text.Table;
 import com.lowagie.text.rtf.RtfWriter2;
 import com.standbyside.datadict.entity.TableInfo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -23,13 +24,16 @@ import java.util.stream.Collectors;
 @Service
 public class DocService {
 
+    @Value("${custom.save-folder}")
+    private String saveFolder;
+
     private Font BASE_FONT = new Font(Font.NORMAL, 10, Font.NORMAL, new Color(0, 0, 0));
 
     public void generateFile(List<TableInfo> tables) throws IOException, DocumentException {
         Document doc = new Document(PageSize.A4);
         String fileName = System.nanoTime() + ".doc";
         System.out.println(fileName);
-        RtfWriter2.getInstance(doc, new FileOutputStream(new File("D://test//" + fileName)));
+        RtfWriter2.getInstance(doc, new FileOutputStream(new File(saveFolder + fileName)));
         doc.open();
 
         for (TableInfo table : tables) {
@@ -65,7 +69,7 @@ public class DocService {
         cells.forEach(cell -> table.addCell(cell));
 
         doc.add(word(" "));
-        doc.add(word(data.getTableName() + " " + data.getTableComment()));
+        doc.add(word(data.getTableComment() + "（" +data.getTableName() + "）"));
         doc.add(table);
     }
 

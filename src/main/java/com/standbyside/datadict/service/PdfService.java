@@ -12,6 +12,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.standbyside.datadict.entity.TableInfo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -24,6 +25,9 @@ import java.util.stream.Collectors;
 @Service
 public class PdfService {
 
+    @Value("${custom.save-folder}")
+    private String saveFolder;
+
     private FontSelector selector;
     {
         selector = new FontSelector();
@@ -35,7 +39,7 @@ public class PdfService {
         Document doc = new Document(PageSize.A4);
         String fileName = System.nanoTime() + ".pdf";
         System.out.println(fileName);
-        PdfWriter.getInstance(doc, new FileOutputStream(new File("D://test//" + fileName)));
+        PdfWriter.getInstance(doc, new FileOutputStream(new File(saveFolder + fileName)));
         doc.open();
 
         for (TableInfo table : tables) {
@@ -67,7 +71,7 @@ public class PdfService {
         cells.forEach(cell -> table.addCell(cell));
 
         doc.add(word(" "));
-        doc.add(word(data.getTableName() + " " + data.getTableComment()));
+        doc.add(word(data.getTableComment() + "（" +data.getTableName() + "）"));
         doc.add(word(" "));
         doc.add(table);
     }
